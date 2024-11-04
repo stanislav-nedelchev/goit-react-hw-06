@@ -1,9 +1,23 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { nanoid } from 'nanoid';
 import css from './ContactForm.module.css';
+import { addContact } from '../../redux/contactsSlice';
 
-const ContactForm = ({ onAddContact }) => {
+const ContactForm = () => {
   const phoneNumberRegex = /^\d{3}-\d{2}-\d{2}$/;
+
+  const dispatch = useDispatch();
+
+  const onAddContact = formData => {
+    const finalContact = {
+      ...formData,
+      id: nanoid(),
+    };
+    const action = addContact(finalContact);
+    dispatch(action);
+  };
 
   const FormSchema = Yup.object().shape({
     name: Yup.string()
